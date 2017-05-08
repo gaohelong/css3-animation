@@ -8,12 +8,15 @@
     position: relative;
     width: 200px;
     height: 150px;
-    margin: 300px auto;
+    margin: 100px auto;
     perspective-origin: 50% 50%;                    // 第一个数值是3D元素所基于的X轴，第二个定义在y轴上的位置.
     @include transform-style(preserve-3d);          // 设置元素为3D变换.
     @include animation(pieceRotate ease 5s);        // 设置执行动画的名称及动画时间.
     @include animation-fill-mode(forwards);         // 设置动画.
     @include animation-iteration-count(infinite);   // 设置动画循环次数.
+    &:hover {
+        @include animation-play-state(paused);
+    }
 }
 
 .piece {
@@ -51,4 +54,64 @@
     100% {
         @include transform(rotateY(360deg));
     }
-};
+}
+
+// 正方形.
+.piece-box2 {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 100px auto;
+    perspective-origin: 50% 50%;                    // 第一个数值是3D元素所基于的X轴，第二个定义在y轴上的位置.
+    @include transform-style(preserve-3d);          // 设置元素为3D变换.
+    @include animation(pieceRotate2 linear 5s);     // 设置执行动画的名称及动画时间.
+    @include animation-fill-mode(forwards);         // 设置动画.
+    @include animation-iteration-count(infinite);   // 设置动画循环次数.
+    &:hover {
+        @include animation-play-state(paused);
+    }
+}
+
+.piece2 {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: red;
+    opacity: 0.5;
+}
+
+@for $piece-i2 from 1 to 7 {
+    $deg: 90deg;
+    .piece2-#{$piece-i2} {
+        @if $piece-i2 < 5 {
+            @include create-transform($rotate-y: degVal($piece-i2 - 1, $deg), $trans-z: $piece2);
+        } @else if $piece-i2 == 5 {
+            @include create-transform($rotate-x: degVal(1, $deg), $trans-z: $piece2);
+        } @else if $piece-i2 == 6 {
+            @include create-transform($rotate-x: degVal(1, -$deg), $trans-z: $piece2);
+        }
+
+        @if $piece-i2 == 1 {
+            background: #ff6666;
+        } @else if $piece-i2 == 2 {
+            background: #ffff00;
+        } @else if $piece-i2 == 3 {
+            background: #006699;
+        } @else if $piece-i2 == 4 {
+            background: #009999;
+        } @else if $piece-i2 == 5 {
+            background: #ff0033;
+        } @else {
+            background: #ff6600;
+        }
+    }
+}
+
+@include keyframes(pieceRotate2) {
+    0% {
+        @include transform(rotateY(0deg));
+    }
+    100% {
+        @include transform(rotateY(360deg));
+    }
+}
