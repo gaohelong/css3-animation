@@ -1,0 +1,139 @@
+@import "../core";
+
+.container {
+    @include perspective(1000px); // 设置透视距离.
+}
+
+//【六边形】
+.piece-box {
+    position: relative;
+    width: 200px;
+    height: 150px;
+    margin: 100px auto;
+    perspective-origin: 50% 50%;                    // 第一个数值是3D元素所基于的X轴，第二个定义在y轴上的位置.
+    @include transform-style(preserve-3d);          // 设置元素为3D变换.
+    @include animation(pieceRotate linear 5s);      // 设置执行动画的名称及动画时间.
+    @include animation-fill-mode(forwards);         // 设置动画.
+    // @include animation-iteration-count(infinite);   // 设置动画循环次数.
+}
+
+//【正方形】
+.piece-box2 {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 100px auto;
+    perspective-origin: 50% 50%;                    // 第一个数值是3D元素所基于的X轴，第二个定义在y轴上的位置.
+    @include transform-style(preserve-3d);          // 设置元素为3D变换.
+    @include animation(pieceRotate2 linear 5s 7s);  // 设置执行动画的名称及动画时间.
+    @include animation-fill-mode(forwards);         // 设置动画.
+    @include animation-direction(reverse);          // 顺、逆时针.
+    // @include animation-iteration-count(infinite);   // 设置动画循环次数.
+}
+
+//【圆锥形】
+.piece-box3 {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 100px auto;
+    perspective-origin: 50% 50%;                     // 第一个数值是3D元素所基于的X轴，第二个定义在y轴上的位置.
+    @include transform-style(preserve-3d);           // 设置元素为3D变换.
+    @include animation(pieceRotate3 linear 5s 12s);  // 设置执行动画的名称及动画时间.
+    @include animation-fill-mode(forwards);          // 设置动画.
+    @include animation-iteration-count(infinite);    // 设置动画循环次数.
+}
+
+.piece {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: red;
+    opacity: 0.5;
+}
+
+@for $piece-i from 1 to 7 {
+    .piece-#{$piece-i} {
+        @include create-transform($rotate-y: degVal($piece-i - 1), $trans-z: $piece);
+
+        @if $piece-i == 1 {
+            background: #ff6666;
+        } @else if $piece-i == 2 {
+            background: #ffff00;
+        } @else if $piece-i == 3 {
+            background: #006699;
+        } @else if $piece-i == 4 {
+            background: #009999;
+        } @else if $piece-i == 5 {
+            background: #ff0033;
+        } @else {
+            background: #ff6600;
+        }
+
+        @include transform-style(preserve-3d);                          // 设置元素为3D变换.
+        @include animation(pieceAnimation#{$piece-i} linear 2s 5s);     // 设置执行动画的名称及动画时间.
+        @include animation-fill-mode(forwards);                         // 设置动画.
+    }
+
+    $deg: 90deg;
+    @include keyframes(pieceAnimation#{$piece-i}) {
+        @if $piece-i < 5 {
+            0% {
+                @include create-transform($rotate-y: degVal($piece-i - 1), $trans-z: $piece);
+            }
+            100% {
+                @include create-transform($rotate-y: degVal($piece-i - 1, $deg), $trans-z: $piece2);
+            }
+        } @else if $piece-i == 5 {
+            0% {
+                @include create-transform($rotate-y: degVal($piece-i - 1), $trans-z: $piece);
+            }
+            100% {
+                @include create-transform($rotate-x: degVal(1, $deg), $trans-z: $piece2);
+            }
+        } @else if $piece-i == 6 {
+            0% {
+                @include create-transform($rotate-y: degVal($piece-i - 1), $trans-z: $piece);
+            }
+            100% {
+                @include create-transform($rotate-x: degVal(1, -$deg), $trans-z: $piece2);
+            }
+        }
+    }
+}
+
+@include keyframes(pieceRotate) {
+    0% {
+        @include transform(rotateY(0deg));
+    }
+    100% {
+        @include transform(rotateY(360deg));
+    }
+}
+
+@include keyframes(pieceRotate2) {
+    0% {
+        @include transform(rotateY(0deg));
+    }
+    100% {
+        @include transform(rotateY(360deg));
+    }
+}
+
+@include keyframes(pieceRotate3) {
+    0% {
+        @include create-transform($rotate-x: degVal(0), $rotate-y: degVal(0));
+    }
+    25% {
+        @include create-transform($rotate-x: degVal(3), $rotate-y: degVal(1));
+    }
+    50% {
+        @include create-transform($rotate-x: degVal(0), $rotate-y: degVal(0));
+    }
+    51% {
+        @include create-transform($rotate-y: degVal(0));
+    }
+    100% {
+        @include create-transform($rotate-y: degVal(6));
+    }
+}
